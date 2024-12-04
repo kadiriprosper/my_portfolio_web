@@ -12,8 +12,23 @@ class DataModel {
       {required String path, required String docId}) async {
     try {
       final doc = await firestoreInstance.collection(path).doc(docId).get();
-      
+
       return {AccessCondition.good: doc.data()};
+    } catch (_) {
+      return {AccessCondition.bad: ''};
+    }
+  }
+
+  Future<Map<AccessCondition, dynamic>> uploadData(
+      {required String path,
+      required String docId,
+      required Map<String, dynamic> data}) async {
+    try {
+      await firestoreInstance.collection(path).doc().set(
+            data,
+          );
+
+      return {AccessCondition.good: null};
     } catch (_) {
       return {AccessCondition.bad: ''};
     }

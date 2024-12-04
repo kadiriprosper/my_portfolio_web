@@ -14,7 +14,7 @@ class ProjectModel {
   List<String> techImgUrlList = [];
 
   factory ProjectModel.fromStorageMap(Map<String, dynamic> data) {
-    final imgData = data['imgUrl'];
+    final imgData = data['techImageList'];
     final tempArray = <String>[];
     for (int i = 0; i < imgData.length; i++) {
       tempArray.add(imgData[i]);

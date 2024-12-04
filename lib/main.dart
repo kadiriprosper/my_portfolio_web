@@ -10,6 +10,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
   runApp(const MainApp());
 }
 
@@ -22,7 +23,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color.fromARGB(255, 4, 0, 31),
       ),
-      initialRoute: RouteManager.dashboardPageRoute,
+      initialRoute: RouteManager.splashScreenRoute,
       unknownRoute: RouteManager.getPages().last,
       getPages: RouteManager.getPages(),
     );
