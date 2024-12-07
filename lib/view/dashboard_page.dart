@@ -28,8 +28,24 @@ const techIconList = {
   'Firebase': 'firebase.svg',
 };
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  Future<void> _getData() async {
+    await dataController.getProject();
+    await dataController.getArticles();
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -337,28 +353,36 @@ class _SmallScreenDashboardState extends State<SmallScreenDashboard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 70),
-                                      AutoSizeText.rich(
-                                        TextSpan(
-                                          text: 'Recent'.toUpperCase(),
-                                          style: GoogleFonts.poppins().copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                            height: 1,
-                                          ),
-                                          children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          AutoSizeText.rich(
                                             TextSpan(
-                                              text: '\nProjects'.toUpperCase(),
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white54,
+                                              text: 'Recent'.toUpperCase(),
+                                              style: GoogleFonts.poppins()
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                                height: 1,
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        // maxLines: 2,
-                                        minFontSize: 60,
-                                        maxFontSize: 100,
-                                        textAlign: TextAlign.center,
+                                              children: [
+                                                TextSpan(
+                                                  text: '\nProjects'
+                                                      .toUpperCase(),
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white54,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            // maxLines: 2,
+                                            minFontSize: 60,
+                                            maxFontSize: 100,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
                                         height:
@@ -391,28 +415,36 @@ class _SmallScreenDashboardState extends State<SmallScreenDashboard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(height: 70),
-                                    AutoSizeText.rich(
-                                      TextSpan(
-                                        text: 'Tech'.toUpperCase(),
-                                        style: GoogleFonts.poppins().copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
-                                          height: 1,
-                                        ),
-                                        children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AutoSizeText.rich(
                                           TextSpan(
-                                            text: '\nThoughts'.toUpperCase(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white54,
+                                            text: 'Tech'.toUpperCase(),
+                                            style:
+                                                GoogleFonts.poppins().copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                              height: 1,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      // maxLines: 2,
-                                      minFontSize: 60,
-                                      maxFontSize: 100,
-                                      textAlign: TextAlign.center,
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    '\nThoughts'.toUpperCase(),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white54,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          // maxLines: 2,
+                                          minFontSize: 60,
+                                          maxFontSize: 100,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(
                                       height:
@@ -1530,7 +1562,7 @@ class _ProjectDetailButtonState extends State<ProjectDetailButton>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0).copyWith(
-                  bottom: 4,
+                  bottom: 0,
                   top: 4,
                 ),
                 child: Column(
@@ -1571,17 +1603,18 @@ class _ProjectDetailButtonState extends State<ProjectDetailButton>
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Row(
                       children: List.generate(
                         currentProject.techImgUrlList.length,
                         (index) => Container(
                           width: 20,
                           height: 20,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          margin: const EdgeInsets.only(right: 8),
                           child: ProjectIconWidget(
                             toolTip: '',
                             imageUrl: currentProject.techImgUrlList[index],
+                            fromNetwork: true,
                           ),
                         ),
                         // Padding(
@@ -1617,10 +1650,12 @@ class ProjectIconWidget extends StatelessWidget {
     super.key,
     required this.toolTip,
     required this.imageUrl,
+    this.fromNetwork = false,
   });
 
   final String toolTip;
   final String imageUrl;
+  final bool fromNetwork;
 
   @override
   Widget build(BuildContext context) {
@@ -1634,7 +1669,7 @@ class ProjectIconWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
         ),
-        child: SvgPicture.network(
+        child:fromNetwork ? Image.network(imageUrl) :  SvgPicture.network(
           imageUrl,
         ),
       ),

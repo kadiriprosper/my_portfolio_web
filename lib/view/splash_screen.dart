@@ -15,28 +15,32 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(future: Future(
-        () async {
-          await dataController.getProject();
-          await dataController.getArticles();
-          Get.toNamed(RouteManager.dashboardPageRoute);
+      body: FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 3),
+          () async {
+            Get.offNamedUntil(
+              RouteManager.dashboardPageRoute,
+              (route) => false,
+            );
+          },
+        ),
+        builder: (context, _) {
+          return SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitRipple(
+                  size: MediaQuery.of(context).size.width / 10,
+                  color: Colors.purple,
+                ),
+                Text('Getting Data...'),
+              ],
+            ),
+          );
         },
-      ), builder: (context, _) {
-        return SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SpinKitRipple(
-                size: MediaQuery.of(context).size.width / 10,
-                color: Colors.purple,
-              ),
-              Text('Getting Data...'),
-            ],
-          ),
-        );
-      }),
+      ),
     );
   }
 }

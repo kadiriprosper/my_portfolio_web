@@ -2,9 +2,9 @@ class ProjectModel {
   ProjectModel({
     required this.projectName,
     required this.projectDescription,
-    required this.techImgUrlList,
     required this.imgUrl,
     required this.url,
+    required this.techImgUrlList,
   });
 
   String projectName;
@@ -19,6 +19,7 @@ class ProjectModel {
     for (int i = 0; i < imgData.length; i++) {
       tempArray.add(imgData[i]);
     }
+    
     return ProjectModel(
       projectName: data['projectName'],
       projectDescription: data['projectDescription'],
